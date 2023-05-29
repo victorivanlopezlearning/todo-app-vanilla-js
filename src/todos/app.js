@@ -8,7 +8,7 @@ export const App = (elementId) => {
 
     // Cuando la función App() se llama
     (() => {
-        const app = document.querySelector('div');
+        const app = document.createElement('MAIN');
         app.innerHTML = html;
         document.querySelector(elementId).appendChild(app);
     })();
