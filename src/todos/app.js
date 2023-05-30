@@ -1,12 +1,12 @@
 import html from './app.html?raw';
 
 /**
- * Inicializa el proyecto en el elemento del HTML indicado
- * @param {String} elementId Id del elemento. Ej. #app
+ * Initializes the project at the specified HTML element
+ * @param {String} elementId Id element. Ej. #app
  */
 export const App = (elementId) => {
 
-    // Cuando la función App() se llama
+    // App() function is called
     (() => {
         const app = document.createElement('MAIN');
         app.innerHTML = html;
