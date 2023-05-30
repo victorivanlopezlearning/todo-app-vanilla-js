@@ -13,6 +13,9 @@ const state = {
         new Todo('Gema del alma'),
         new Todo('Gema del tiempo'),
         new Todo('Gema del poder'),
+        new Todo('Gema del realidad'),
+        new Todo('Gema del mente'),
+        new Todo('Gema del espacio'),
     ],
     filter: Filters.All,
 };
@@ -27,11 +30,29 @@ const loadStore = () => {
 };
 
 /**
- * Create a todo
+ * Get Todos
+ * @param {Filters} filter 
+ */
+const getTodos = (filter = Filters.All) => {
+    switch(filter) {
+        case Filters.All:
+            return [...state.todos];
+        case Filters.Completed:
+            return state.todos.filter(todo => todo.done);
+        case Filters.Pending:
+            return state.todos.filter(todo => !todo.done);
+        default: 
+            throw new Error(`Option ${filter} is not valid`); 
+    };
+};
+
+/**
+ * Create a Todo
  * @param {String} description Task description
  */
 const addTodo = (description) => {
-    throw new Error('Not Implemented');
+    if(!description) throw new Error('Description is required');
+    state.todos.push(new Todo(description));
 };
 
 /**
@@ -39,7 +60,15 @@ const addTodo = (description) => {
  * @param {String} todoId Todo Identifier
  */
 const toggleTodo = (todoId) => {
-    throw new Error('Not Implemented');
+    if(!todoId) throw new Error('todoId is required');
+    
+    state.todos = state.todos.map(todo => {
+        if(todo.id === todoId) {
+            todo.done = !todo.done;
+        };
+
+        return todo;
+    });
 };
 
 /**
@@ -47,23 +76,25 @@ const toggleTodo = (todoId) => {
  * @param {String} todoId Todo Identifier
  */
 const deleteTodo = (todoId) => {
-    throw new Error('Not Implemented');
+    if(!todoId) throw new Error('todoId is required');
+    state.todos = state.todos.filter(todo => todo.id !== todoId);
 };
 
 const deleteCompleted = () => {
-    throw new Error('Not Implemented');
+    state.todos = state.todos.filter(todo => !todo.done);
 };
 
 /**
  * Change Todo filter
- * @param {String} newFilter 
+ * @param {Filters} newFilter
  */
-const setFilter = (newFilter = Filters.All) => {
-    throw new Error('Not Implemented');
+const setFilter = (newFilter) => {
+    if(!Object.values(Filters).includes(newFilter) || !newFilter) throw new Error('Filter not valid');
+    state.filter = newFilter;
 };
 
 const getCurrentFilter = () => {
-    throw new Error('Not Implemented');
+    return state.filter;
 };
 
 export default {
@@ -71,6 +102,7 @@ export default {
     deleteCompleted,
     deleteTodo,
     getCurrentFilter,
+    getTodos,
     initStore,
     loadStore,
     setFilter,
