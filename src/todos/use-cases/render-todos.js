@@ -18,7 +18,7 @@ export const renderTodos = (elementId, todos) => {
     if(!elementId) throw new Error('elementId is required');
     if(!todos) throw new Error('todos is required');
 
-    cleanHTML(elementId);
+    cleanHTML(element);
 
     todos.forEach(todo => {
         element.append(createTodoHTML(todo));
