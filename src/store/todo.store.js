@@ -1,7 +1,7 @@
 import { Todo } from '../todos/models/todo.model';
 
 // Recommended to centralize the filter options in one object
-const Filters = {
+export const Filters = {
     All: 'all',
     Completed: 'completed',
     Pending: 'pending'
