@@ -1,0 +1,33 @@
+(function(){const t=document.createElement("link").relList;if(t&&t.supports&&t.supports("modulepreload"))return;for(const o of document.querySelectorAll('link[rel="modulepreload"]'))l(o);new MutationObserver(o=>{for(const r of o)if(r.type==="childList")for(const a of r.addedNodes)a.tagName==="LINK"&&a.rel==="modulepreload"&&l(a)}).observe(document,{childList:!0,subtree:!0});function c(o){const r={};return o.integrity&&(r.integrity=o.integrity),o.referrerPolicy&&(r.referrerPolicy=o.referrerPolicy),o.crossOrigin==="use-credentials"?r.credentials="include":o.crossOrigin==="anonymous"?r.credentials="omit":r.credentials="same-origin",r}function l(o){if(o.ep)return;o.ep=!0;const r=c(o);fetch(o.href,r)}})();const S=`<section class="todoapp">\r
+    <header class="header">\r
+        <h1>Tareas</h1>\r
+        <input id="new-todo-input" class="new-todo" placeholder="Escribre tus tareas" autofocus>\r
+    </header>\r
+    \r
+    <!-- This section should be hidden by default and shown when there are todos -->\r
+    <section class="main">\r
+        <input id="toggle-all" class="toggle-all" type="checkbox">\r
+        <label for="toggle-all">Mark all as complete</label>\r
+        <ul class="todo-list"></ul>\r
+    </section>\r
+\r
+    <!-- This footer should hidden by default and shown when there are todos -->\r
+    <footer class="footer">\r
+        <!-- This should be "0 items left" by default -->\r
+        <span class="todo-count"><strong id="pending-count">0</strong> pendiente(s)</span>\r
+        <!-- Remove this if you don't implement routing -->\r
+        <ul class="filters">\r
+            <li>\r
+                <a id="all" class="filter" href="#/">Todos</a>\r
+            </li>\r
+            <li>\r
+                <a id="pending" class="filter" href="#/active">Pendientes</a>\r
+            </li>\r
+            <li>\r
+                <a id="completed" class="filter" href="#/completed">Completados</a>\r
+            </li>\r
+        </ul>\r
+        <!-- Hidden if no completed items are left ↓ -->\r
+        <button class="clear-completed">Borrar completados</button>\r
+    </footer>\r
+</section>`;let y;const b=new Uint8Array(16);function v(){if(!y&&(y=typeof crypto<"u"&&crypto.getRandomValues&&crypto.getRandomValues.bind(crypto),!y))throw new Error("crypto.getRandomValues() not supported. See https://github.com/uuidjs/uuid#getrandomvalues-not-supported");return y(b)}const s=[];for(let e=0;e<256;++e)s.push((e+256).toString(16).slice(1));function I(e,t=0){return(s[e[t+0]]+s[e[t+1]]+s[e[t+2]]+s[e[t+3]]+"-"+s[e[t+4]]+s[e[t+5]]+"-"+s[e[t+6]]+s[e[t+7]]+"-"+s[e[t+8]]+s[e[t+9]]+"-"+s[e[t+10]]+s[e[t+11]]+s[e[t+12]]+s[e[t+13]]+s[e[t+14]]+s[e[t+15]]).toLowerCase()}const q=typeof crypto<"u"&&crypto.randomUUID&&crypto.randomUUID.bind(crypto),L={randomUUID:q};function U(e,t,c){if(L.randomUUID&&!t&&!e)return L.randomUUID();e=e||{};const l=e.random||(e.rng||v)();if(l[6]=l[6]&15|64,l[8]=l[8]&63|128,t){c=c||0;for(let o=0;o<16;++o)t[c+o]=l[o];return t}return I(l)}class P{constructor(t){this.id=U(),this.description=t,this.done=!1,this.createdAt=new Date}}const p={All:"all",Completed:"completed",Pending:"pending"},d={todos:[],filter:p.All},A=()=>{C(),console.log("InitStore")},C=()=>{if(localStorage.getItem("state")){const{todos:e=[],filter:t=p.All}=JSON.parse(localStorage.getItem("state"));d.todos=e,d.filter=t}},h=()=>{localStorage.setItem("state",JSON.stringify(d))},F=(e=p.All)=>{switch(e){case p.All:return[...d.todos];case p.Completed:return d.todos.filter(t=>t.done);case p.Pending:return d.todos.filter(t=>!t.done);default:throw new Error(`Option ${e} is not valid`)}},D=e=>{if(!e)throw new Error("Description is required");d.todos.push(new P(e)),h()},N=e=>{if(!e)throw new Error("todoId is required");d.todos=d.todos.map(t=>(t.id===e&&(t.done=!t.done),t)),h()},O=e=>{if(!e)throw new Error("todoId is required");d.todos=d.todos.filter(t=>t.id!==e),h()},x=()=>{d.todos=d.todos.filter(e=>!e.done),h()},k=e=>{if(!Object.values(p).includes(e)||!e)throw new Error("Filter not valid");d.filter=e,h()},M=()=>d.filter,i={addTodo:D,deleteCompleted:x,deleteTodo:O,getCurrentFilter:M,getTodos:F,initStore:A,loadStore:C,setFilter:k,toggleTodo:N},V=e=>{if(!e)throw new Error("element is required");for(;e.firstChild;)e.removeChild(e.firstChild)},$=e=>{if(!e)throw new Error("todo Object is required");const{done:t,id:c,description:l}=e,o=document.createElement("LI");t&&o.classList.add("completed"),o.dataset.id=`${c}`;const r=document.createElement("DIV"),a=document.createElement("INPUT");a.classList.add("toggle"),a.type="checkbox",t?a.checked=!0:a.checked=!1,r.appendChild(a);const g=document.createElement("LABEL");g.textContent=`${l}`,r.appendChild(g);const n=document.createElement("BUTTON");n.classList.add("destroy"),r.appendChild(n);const u=document.createElement("INPUT");return u.classList.add("edit"),u.value="Create a TodoMVC template",o.appendChild(r),o.appendChild(u),o};let w;const B=e=>{if(w||(w=document.querySelector(e)),!w)throw new Error(`Element ${e} not found`);w.textContent=i.getTodos(p.Pending).length};let E;const H=(e,t)=>{if(E||(E=document.querySelector(e)),!e)throw new Error("elementId is required");if(!t)throw new Error("todos is required");V(E),t.forEach(c=>{E.append($(c))})},m={ClearCompleted:".clear-completed",NewTodoInput:"#new-todo-input",TodoList:".todo-list",TodoFilters:".filters",PendingCountLabel:"#pending-count"},R=e=>{const t=()=>{const n=i.getTodos(i.getCurrentFilter());H(m.TodoList,n),c()},c=()=>{B(m.PendingCountLabel)},l=()=>{const n=i.getCurrentFilter();document.querySelector(`#${n}`).classList.add("selected")};(()=>{const n=document.createElement("MAIN");n.innerHTML=S,document.querySelector(e).appendChild(n),t(),l()})();const o=document.querySelector(m.NewTodoInput),r=document.querySelector(m.TodoList),a=document.querySelector(m.ClearCompleted),g=document.querySelector(m.TodoFilters);o.addEventListener("keyup",n=>{const u=n.target.value;n.key==="Enter"&&u.trim().length!==0&&(i.addTodo(u),t(),o.value="")}),r.addEventListener("click",n=>{const f=n.target.closest("[data-id]").getAttribute("data-id");i.toggleTodo(f),t()}),r.addEventListener("click",n=>{if(!(n.target.className==="destroy"))return;const f=n.target.closest("[data-id]").getAttribute("data-id");i.deleteTodo(f),t()}),a.addEventListener("click",()=>{i.deleteCompleted(),t()}),g.addEventListener("click",n=>{n.preventDefault();const u=n.target;if(!(n.target.className==="filter"))return;const T=g.querySelector(".selected");switch(T&&T.classList.remove("selected"),u.classList.add("selected"),u.id){case"all":i.setFilter(p.All);break;case"pending":i.setFilter(p.Pending);break;case"completed":i.setFilter(p.Completed);break}t()})};i.initStore();R("#app");
