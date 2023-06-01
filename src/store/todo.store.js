@@ -9,14 +9,7 @@ export const Filters = {
 
 // Defining global state of the application
 const state = {
-    todos: [
-        new Todo('Gema del alma'),
-        new Todo('Gema del tiempo'),
-        new Todo('Gema del poder'),
-        new Todo('Gema del realidad'),
-        new Todo('Gema del mente'),
-        new Todo('Gema del espacio'),
-    ],
+    todos: [],
     filter: Filters.All,
 };
 
