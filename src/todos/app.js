@@ -26,12 +26,18 @@ export const App = (elementId) => {
         renderPending(ElementIds.PendingCountLabel);
     };
 
+    const currentFilter = () => {
+        const currentFilter = todoStore.getCurrentFilter();
+        document.querySelector(`#${currentFilter}`).classList.add('selected');
+    };
+
     // App() function is called
     (() => {
         const app = document.createElement('MAIN');
         app.innerHTML = html;
         document.querySelector(elementId).appendChild(app);
         displayTodos();
+        currentFilter();
     })();
 
     // HTML Reference
@@ -76,23 +82,26 @@ export const App = (elementId) => {
 
     filterUL.addEventListener('click', (e) => {
         e.preventDefault();
+
+        const elementSelected = e.target;
         const isFilterElement = e.target.className === 'filter';
         if(!isFilterElement) return;
 
-        const filtersLI = document.querySelectorAll('.filter');
-        filtersLI.forEach( (filter) => filter.classList.remove('selected'));
+        const currentSelected = filterUL.querySelector('.selected');
+        if(currentSelected) {
+            currentSelected.classList.remove('selected');
+        };
 
-        const elementSelected = e.target;
         elementSelected.classList.add('selected');
         
-        switch(elementSelected.textContent) {
-            case 'Todos':
+        switch(elementSelected.id) {
+            case 'all':
                 todoStore.setFilter(Filters.All);
             break;
-            case 'Pendientes':
+            case 'pending':
                 todoStore.setFilter(Filters.Pending);
             break;
-            case 'Completados':
+            case 'completed':
                 todoStore.setFilter(Filters.Completed);
             break;
         };
